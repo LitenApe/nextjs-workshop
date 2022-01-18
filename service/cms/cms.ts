@@ -15,7 +15,7 @@ export class CMS {
 
     if (!res.ok) {
       this.logger.error(
-        `Failed to retrieve resources at ${resource}. Responded with status: ${res.status}`
+        `Failed to retrieve resources at [url=${resource}]. Responded with [status=${res.status}]`
       );
       throw new Error("Failed request: " + res.statusText);
     }
@@ -23,12 +23,22 @@ export class CMS {
     return res.json();
   }
 
+  async getPost(id: string): Promise<PublishedPost> {
+    this.logger.trace(`Retrieving post with [id=${id}]`);
+
+    const res = await this.internalFetch<PublishedPost>(`blog-posts/${id}`);
+
+    this.logger.trace(`Successfully retrieved post with [id=${id}]`);
+
+    return res;
+  }
+
   async getPosts(): Promise<Array<PublishedPost>> {
     this.logger.trace("Retrieving posts");
 
     const res = await this.internalFetch<Array<PublishedPost>>("blog-posts");
 
-    this.logger.trace(`Successfully retrieved ${res.length} posts`);
+    this.logger.trace(`Successfully retrieved [length=${res.length}] posts`);
     return res;
   }
 
@@ -39,7 +49,7 @@ export class CMS {
       "blog-posts?published_at_null=true&_publicationState=preview"
     );
 
-    this.logger.trace(`Successfully retrieved ${res.length} drafts`);
+    this.logger.trace(`Successfully retrieved [length=${res.length}] drafts`);
     return res;
   }
 }
