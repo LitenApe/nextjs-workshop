@@ -1,4 +1,5 @@
-import { Container } from "@mui/material";
+import { Container, Link as MUILink, List, ListItem } from "@mui/material";
+import Link from "next/link";
 import * as React from "react";
 
 export function NavigationBar(): JSX.Element {
@@ -15,7 +16,23 @@ export function NavigationBar(): JSX.Element {
         backgroundColor: (theme) => theme.palette.primary.dark,
       }}
     >
-      Navigation bar
+      <List
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+        }}
+      >
+        <ListItem sx={{ width: "fit-content" }}>
+          <MUILink component={Link} href="/">
+            Home
+          </MUILink>
+        </ListItem>
+        <ListItem sx={{ width: "fit-content" }}>
+          <MUILink component={Link} href="/post">
+            Posts
+          </MUILink>
+        </ListItem>
+      </List>
     </Container>
   );
 }

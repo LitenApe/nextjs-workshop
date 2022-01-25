@@ -28,15 +28,19 @@ export class CMS {
 
     const res = await this.internalFetch<PublishedPost>(`blog-posts/${id}`);
 
+    console.log("response", res);
+
     this.logger.trace(`Successfully retrieved post with [id=${id}]`);
 
     return res;
   }
 
-  async getPosts(): Promise<Array<PublishedPost>> {
+  async getPosts(featured: boolean = false): Promise<Array<PublishedPost>> {
     this.logger.trace("Retrieving posts");
 
-    const res = await this.internalFetch<Array<PublishedPost>>("blog-posts");
+    const res = await this.internalFetch<Array<PublishedPost>>(
+      `blog-posts${featured ? "?_isFeatured=true" : ""}`
+    );
 
     this.logger.trace(`Successfully retrieved [length=${res.length}] posts`);
     return res;

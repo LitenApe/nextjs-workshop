@@ -1,7 +1,17 @@
 import { NextPageContext } from "next";
 import Head from "next/head";
+import { CMS } from "../service/cms/cms";
+import { PublishedPost } from "../service/cms/domain";
+import { PostLink } from "../components/PostLink";
+import { List, ListItem } from "@mui/material";
 
-export default function Home(): JSX.Element {
+interface Props {
+  readonly posts: Array<PublishedPost>;
+}
+
+export default function Home(props: Props): JSX.Element {
+  const { posts } = props;
+
   return (
     <>
       <Head>
@@ -22,12 +32,23 @@ export default function Home(): JSX.Element {
         reprehenderit accusantium architecto commodi. Modi architecto officia
         nulla quisquam velit sed doloremque unde?
       </p>
+
+      <List>
+        {posts.map((post) => (
+          <ListItem key={`blog-post-link-${post.id}`}>
+            <PostLink title={post.title} id={post.id} />
+          </ListItem>
+        ))}
+      </List>
     </>
   );
 }
 
 export async function getStaticProps(context: NextPageContext) {
+  const cms = new CMS();
+  const posts = await cms.getPosts(true);
+
   return {
-    props: {},
+    props: { posts },
   };
 }
