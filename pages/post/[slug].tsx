@@ -1,22 +1,24 @@
 import Head from "next/head";
 import { CMS } from "../../service/cms/cms";
-import { PublishedPost } from "../../service/cms/domain";
+import { Post } from "../../service/cms/domain";
+import { isDefined } from "../../utils/isDefined";
 
 interface Props {
-  readonly post: PublishedPost;
+  readonly post: Post;
 }
 
-export default function Post(props: Props): JSX.Element {
-  const { post } = props;
-
+export default function BlogPost(props: Props): JSX.Element {
+  const {
+    post: { title, published_at, content },
+  } = props;
   return (
     <>
       <Head>
-        <title>{post.title}</title>
+        <title>{title}</title>
       </Head>
-      <p>Published {post.published_at}</p>
-      <h1>{post.title}</h1>
-      <p>{post.content}</p>
+      {isDefined(published_at) && <p>Published {published_at}</p>}
+      <h1>{title}</h1>
+      <p>{content}</p>
     </>
   );
 }

@@ -15,3 +15,5 @@ export interface DraftPost {
   created_at: string;
   updated_at: string;
 }
+
+export type Post = PublishedPost | DraftPost;

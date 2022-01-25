@@ -1,6 +1,6 @@
 import { isDefined } from "../../utils/isDefined";
 import { Logger } from "../logger/logger";
-import { DraftPost, PublishedPost } from "./domain";
+import { Post } from "./domain";
 
 interface Options {
   featured?: true;
@@ -30,10 +30,10 @@ export class CMS {
     return res.json();
   }
 
-  async getPost(id: string): Promise<PublishedPost> {
+  async getPost(id: string): Promise<Post> {
     this.logger.trace(`Retrieving post with [id=${id}]`);
 
-    const res = await this.internalFetch<PublishedPost>(
+    const res = await this.internalFetch<Post>(
       `blog-posts/${id}?_publicationState=preview`
     );
 
@@ -42,7 +42,7 @@ export class CMS {
     return res;
   }
 
-  async getPosts(options: Options = {}): Promise<Array<PublishedPost>> {
+  async getPosts(options: Options = {}): Promise<Array<Post>> {
     const { featured, drafts, preview } = options;
     this.logger.trace(
       "Retrieving posts",
@@ -63,7 +63,7 @@ export class CMS {
       query.append("_publicationState", "preview");
     }
 
-    const res = await this.internalFetch<Array<PublishedPost>>(
+    const res = await this.internalFetch<Array<Post>>(
       `blog-posts?${query.toString()}`
     );
 
