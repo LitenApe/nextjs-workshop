@@ -8,12 +8,12 @@ export class Logger {
   }
 
   error(...args: Array<unknown>) {
-    this.src.error(`[${this.name}]`, args);
+    this.src.error(`[${this.name}]`, ...args);
   }
 
   trace(...args: Array<unknown>): void {
     if (process.env.NODE_ENV !== "production") {
-      this.src.trace(`[${this.name}]`, args);
+      this.src.trace(`[${this.name}]`, ...args);
     }
   }
 }
