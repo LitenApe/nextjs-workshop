@@ -22,8 +22,15 @@ export default function Post(props: Props): JSX.Element {
 }
 
 export async function getStaticPaths() {
+  const cms = new CMS();
+  const posts = await cms.getPosts({ preview: true });
+
   return {
-    paths: [{ params: { slug: "1" } }, { params: { slug: "2" } }],
+    paths: posts.map((post) => ({
+      params: {
+        slug: String(post.id),
+      },
+    })),
     fallback: false,
   };
 }
@@ -34,5 +41,6 @@ export async function getStaticProps(context: any) {
 
   return {
     props: { post },
+    revalidate: 60,
   };
 }

@@ -1,5 +1,12 @@
+import { isDefined } from "../../utils/isDefined";
 import { Logger } from "../logger/logger";
 import { DraftPost, PublishedPost } from "./domain";
+
+interface Options {
+  featured?: true;
+  drafts?: true;
+  preview?: true;
+}
 
 export class CMS {
   private logger;
@@ -26,34 +33,41 @@ export class CMS {
   async getPost(id: string): Promise<PublishedPost> {
     this.logger.trace(`Retrieving post with [id=${id}]`);
 
-    const res = await this.internalFetch<PublishedPost>(`blog-posts/${id}`);
-
-    console.log("response", res);
+    const res = await this.internalFetch<PublishedPost>(
+      `blog-posts/${id}?_publicationState=preview`
+    );
 
     this.logger.trace(`Successfully retrieved post with [id=${id}]`);
 
     return res;
   }
 
-  async getPosts(featured: boolean = false): Promise<Array<PublishedPost>> {
-    this.logger.trace("Retrieving posts");
+  async getPosts(options: Options = {}): Promise<Array<PublishedPost>> {
+    const { featured, drafts, preview } = options;
+    this.logger.trace(
+      "Retrieving posts",
+      `provided options: [featured=${featured}], [drafts=${drafts}], [preview=${preview}]`
+    );
+
+    const query = new URLSearchParams();
+
+    if (isDefined(featured)) {
+      query.append("_isFeatured", "true");
+    }
+
+    if (isDefined(drafts)) {
+      query.append("published_at_null", "true");
+    }
+
+    if (isDefined(drafts) || isDefined(preview)) {
+      query.append("_publicationState", "preview");
+    }
 
     const res = await this.internalFetch<Array<PublishedPost>>(
-      `blog-posts${featured ? "?_isFeatured=true" : ""}`
+      `blog-posts?${query.toString()}`
     );
 
     this.logger.trace(`Successfully retrieved [length=${res.length}] posts`);
-    return res;
-  }
-
-  async getDrafts(): Promise<Array<DraftPost>> {
-    this.logger.trace("Retrieving drafts");
-
-    const res = await this.internalFetch<Array<DraftPost>>(
-      "blog-posts?published_at_null=true&_publicationState=preview"
-    );
-
-    this.logger.trace(`Successfully retrieved [length=${res.length}] drafts`);
     return res;
   }
 }

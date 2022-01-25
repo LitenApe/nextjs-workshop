@@ -46,7 +46,7 @@ export default function Home(props: Props): JSX.Element {
 
 export async function getStaticProps(context: NextPageContext) {
   const cms = new CMS();
-  const posts = await cms.getPosts(true);
+  const posts = await cms.getPosts({ featured: true });
 
   return {
     props: { posts },
