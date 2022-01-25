@@ -2,6 +2,21 @@ import { Container, Link as MUILink, List, ListItem } from "@mui/material";
 import Link from "next/link";
 import * as React from "react";
 
+const links = [
+  {
+    href: "/",
+    label: "Home",
+  },
+  {
+    href: "/post",
+    label: "Posts",
+  },
+  {
+    href: "/auth/signin",
+    label: "Sign In",
+  },
+];
+
 export function NavigationBar(): JSX.Element {
   return (
     <Container
@@ -22,16 +37,16 @@ export function NavigationBar(): JSX.Element {
           flexDirection: "row",
         }}
       >
-        <ListItem sx={{ width: "fit-content" }}>
-          <MUILink component={Link} href="/">
-            Home
-          </MUILink>
-        </ListItem>
-        <ListItem sx={{ width: "fit-content" }}>
-          <MUILink component={Link} href="/post">
-            Posts
-          </MUILink>
-        </ListItem>
+        {links.map((link) => (
+          <ListItem
+            key={`navigation-bar_${link.label}`}
+            sx={{ width: "fit-content" }}
+          >
+            <MUILink component={Link} href={link.href}>
+              {link.label}
+            </MUILink>
+          </ListItem>
+        ))}
       </List>
     </Container>
   );
