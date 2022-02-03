@@ -1,5 +1,6 @@
 import { Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
+import { NextPageContext } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
 
@@ -19,11 +20,16 @@ export default function SignIn() {
         identity,
         secret,
       }),
-    }).then((res) => {
-      if (res.ok) {
-        router.push("/");
-      }
-    });
+    })
+      .then((res) => {
+        document.cookie = "authenticated=true";
+        if (res.ok) {
+          router.push("/");
+        }
+      })
+      .catch(() => {
+        document.cookie = "authenticated=false";
+      });
   }
 
   return (

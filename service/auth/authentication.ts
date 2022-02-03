@@ -25,21 +25,26 @@ export class Authentication {
     return res.json();
   }
 
-  async signIn(credentials: UserCredentials): Promise<unknown> {
-    this.logger.trace(
+  async signIn(
+    credentials: UserCredentials
+  ): Promise<{ jwt: string; user: unknown }> {
+    this.logger.info(
       `verifying credentials for [identity=${credentials.identity}]`
     );
 
-    const res = this.internalFetch("/auth/local", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify({
-        identifier: credentials.identity,
-        password: credentials.secret,
-      }),
-    });
+    const res = await this.internalFetch<{ jwt: string; user: unknown }>(
+      "/api/auth/local",
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          identifier: credentials.identity,
+          password: credentials.secret,
+        }),
+      }
+    );
 
     return res;
   }

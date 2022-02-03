@@ -7,13 +7,23 @@ export class Logger {
     this.name = name;
   }
 
-  error(...args: Array<unknown>) {
-    this.src.error(`[${this.name}]`, ...args);
+  private executeCall(fn: Function, ...args: Array<unknown>): void {
+    fn(`[${this.name}]`, ...args);
+  }
+
+  error(...args: Array<unknown>): void {
+    this.executeCall(this.src.error, ...args);
+  }
+
+  info(...args: Array<unknown>): void {
+    if (process.env.NODE_ENV !== "production") {
+      this.executeCall(this.src.info, ...args);
+    }
   }
 
   trace(...args: Array<unknown>): void {
     if (process.env.NODE_ENV !== "production") {
-      this.src.trace(`[${this.name}]`, ...args);
+      this.executeCall(this.src.trace, ...args);
     }
   }
 }

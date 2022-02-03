@@ -3,10 +3,10 @@ import { NextPageContext } from "next";
 import Head from "next/head";
 import { PostLink } from "../../components/PostLink";
 import { CMS } from "../../service/cms/cms";
-import { PublishedPost } from "../../service/cms/domain";
+import { Post } from "../../service/cms/domain";
 
 interface Props {
-  readonly posts: Array<PublishedPost>;
+  readonly posts: Array<Post>;
 }
 
 export default function Overview(props: Props): JSX.Element {

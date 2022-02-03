@@ -11,12 +11,12 @@ export function RouteTransition(props: React.PropsWithChildren<unknown>) {
   const router = useRouter();
 
   function start(url: string): void {
-    logger.trace(`enabling loading state for [url=${url}]`);
+    logger.info(`enabling loading state for [url=${url}]`);
     setLoading((prev) => !prev);
   }
 
   function stop(url: string): void {
-    logger.trace(`disabling loading state for [url=${url}]`);
+    logger.info(`disabling loading state for [url=${url}]`);
     setLoading((prev) => !prev);
   }
 

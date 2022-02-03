@@ -3,14 +3,30 @@ import { CMS } from "../../service/cms/cms";
 import { Post } from "../../service/cms/domain";
 import { isDefined } from "../../utils/isDefined";
 
+import * as React from "react";
+import { useFetch } from "../../hooks/useFetch";
 interface Props {
-  readonly post: Post;
+  readonly id: string;
 }
 
 export default function BlogPost(props: Props): JSX.Element {
-  const {
-    post: { title, published_at, content },
-  } = props;
+  const { id } = props;
+  const { result, isFetching, callback } = useFetch<Post>(`/api/post/${id}`);
+
+  React.useEffect(() => {
+    callback();
+  }, []);
+
+  if (isFetching) {
+    return <p>...loading</p>;
+  }
+
+  if (result === undefined) {
+    return <p>error</p>;
+  }
+
+  const { title, published_at, content } = result;
+
   return (
     <>
       <Head>
@@ -38,11 +54,8 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps(context: any) {
-  const cms = new CMS();
-  const post = await cms.getPost(context.params.slug);
-
   return {
-    props: { post },
+    props: { id: context.params.slug },
     revalidate: 60,
   };
 }

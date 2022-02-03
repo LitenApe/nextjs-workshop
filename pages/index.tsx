@@ -1,12 +1,12 @@
 import { NextPageContext } from "next";
 import Head from "next/head";
 import { CMS } from "../service/cms/cms";
-import { PublishedPost } from "../service/cms/domain";
+import { Post } from "../service/cms/domain";
 import { PostLink } from "../components/PostLink";
 import { List, ListItem } from "@mui/material";
 
 interface Props {
-  readonly posts: Array<PublishedPost>;
+  readonly posts: Array<Post>;
 }
 
 export default function Home(props: Props): JSX.Element {
