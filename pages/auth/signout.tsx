@@ -14,6 +14,7 @@ export default function SignOut() {
       method: "DELETE",
     }).then((res) => {
       if (res.ok) {
+        localStorage.removeItem("authentication");
         router.push("/");
       }
     });

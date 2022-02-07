@@ -22,6 +22,7 @@ export default function SignIn() {
       }),
     }).then((res) => {
       if (res.ok) {
+        localStorage.setItem("authentication", "true");
         router.push("/");
       }
     });

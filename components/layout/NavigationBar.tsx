@@ -1,8 +1,9 @@
 import { Container, List, ListItem } from "@mui/material";
 import Link from "next/link";
 import * as React from "react";
+import { isDefined } from "../../utils/isDefined";
 
-const links = [
+const common = [
   {
     href: "/",
     label: "Home",
@@ -11,13 +12,12 @@ const links = [
     href: "/post",
     label: "Posts",
   },
+];
+
+const authenticated = [
   {
     href: "/draft",
     label: "Draft",
-  },
-  {
-    href: "/auth/signin",
-    label: "Sign In",
   },
   {
     href: "/auth/signout",
@@ -25,7 +25,27 @@ const links = [
   },
 ];
 
+const unauthenticated = [
+  {
+    href: "/auth/signin",
+    label: "Sign In",
+  },
+];
+
 export function NavigationBar(): JSX.Element {
+  const [isAuthorized, setIsAuthorized] = React.useState(false);
+
+  React.useEffect(() => {
+    if (typeof localStorage !== "undefined") {
+      const authorized = localStorage.getItem("authentication");
+      setIsAuthorized(() => isDefined(authorized));
+    } else {
+      setIsAuthorized(() => false);
+    }
+  });
+
+  const links = common.concat(isAuthorized ? authenticated : unauthenticated);
+
   return (
     <Container
       component="nav"
