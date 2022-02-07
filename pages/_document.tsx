@@ -7,6 +7,7 @@ import Document, {
 } from "next/document";
 import { NavigationBar } from "../components/layout/NavigationBar";
 import { Footer } from "../components/layout/Footer";
+// import { authGuard } from "./middleware/authGuard";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -18,7 +19,10 @@ class MyDocument extends Document {
         enhanceComponent: (Page) => Page,
       });
 
+    // await authGuard(ctx.req, ctx.res);
+
     const initialProps = await Document.getInitialProps(ctx);
+
     return initialProps;
   }
 

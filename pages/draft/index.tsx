@@ -4,6 +4,7 @@ import Head from "next/head";
 import { PostLink } from "../../components/PostLink";
 import { CMS } from "../../service/cms/cms";
 import { Post } from "../../service/cms/domain";
+import { authGuard } from "../middleware/authGuard";
 
 interface Props {
   readonly posts: Array<Post>;
@@ -30,13 +31,27 @@ export default function Overview(props: Props): JSX.Element {
   );
 }
 
-export async function getStaticProps(context: NextPageContext) {
-  const cms = new CMS();
-  const posts = await cms.getPosts({ drafts: true });
+export async function getServerSideProps(context: NextPageContext) {
+  const unauthorized = await authGuard(context.req, context.res);
+  if (unauthorized) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/auth/signin",
+      },
+    };
+  }
 
-  console.log(context);
+  try {
+    const cms = new CMS();
+    const posts = await cms.getPosts({ drafts: true });
 
-  return {
-    props: { posts },
-  };
+    return {
+      props: { posts },
+    };
+  } catch {
+    return {
+      props: { posts: [] },
+    };
+  }
 }
