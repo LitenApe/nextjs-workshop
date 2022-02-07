@@ -20,16 +20,11 @@ export default function SignIn() {
         identity,
         secret,
       }),
-    })
-      .then((res) => {
-        document.cookie = "authenticated=true";
-        if (res.ok) {
-          router.push("/");
-        }
-      })
-      .catch(() => {
-        document.cookie = "authenticated=false";
-      });
+    }).then((res) => {
+      if (res.ok) {
+        router.push("/");
+      }
+    });
   }
 
   return (

@@ -12,8 +12,16 @@ const links = [
     label: "Posts",
   },
   {
+    href: "/draft",
+    label: "Draft",
+  },
+  {
     href: "/auth/signin",
     label: "Sign In",
+  },
+  {
+    href: "/auth/signout",
+    label: "Sign Out",
   },
 ];
 
