@@ -1,5 +1,5 @@
 import { ServerResponse } from "http";
-import { isDefined } from "../../utils/isDefined";
+import { isDefined } from "../utils/isDefined";
 
 const guarded = ["/draft"];
 

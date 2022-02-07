@@ -4,7 +4,7 @@ import Head from "next/head";
 import { PostLink } from "../../components/PostLink";
 import { CMS } from "../../service/cms/cms";
 import { Post } from "../../service/cms/domain";
-import { authGuard } from "../middleware/authGuard";
+import { authGuard } from "../../middleware/authGuard";
 
 interface Props {
   readonly posts: Array<Post>;

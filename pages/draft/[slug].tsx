@@ -4,7 +4,7 @@ import { Post } from "../../service/cms/domain";
 import { isDefined } from "../../utils/isDefined";
 
 import * as React from "react";
-import { authGuard } from "../middleware/authGuard";
+import { authGuard } from "../../middleware/authGuard";
 
 interface Props {
   readonly post: Post;
