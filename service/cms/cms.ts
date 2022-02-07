@@ -1,11 +1,14 @@
 import { DataSource, Options, Post } from "./domain";
+import { StrapiV3 } from "./sources/strapiv3";
 import { StrapiV4 } from "./sources/strapiv4";
 
 export class CMS {
   private source: DataSource;
 
   constructor() {
-    this.source = new StrapiV4();
+    this.source = process.env.STRAPI_URL?.includes("localhost")
+      ? new StrapiV4()
+      : new StrapiV3();
   }
 
   async getPost(id: string): Promise<Post> {

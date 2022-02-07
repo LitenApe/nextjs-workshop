@@ -22,7 +22,7 @@ export default function Overview(props: Props): JSX.Element {
       <List>
         {posts.map((post) => (
           <ListItem key={`blog-post-link-${post.id}`}>
-            <PostLink title={post.title} slug={`/post/${post.id}`} />
+            <PostLink title={post.title} slug={`/draft/${post.id}`} />
           </ListItem>
         ))}
       </List>
@@ -32,7 +32,9 @@ export default function Overview(props: Props): JSX.Element {
 
 export async function getStaticProps(context: NextPageContext) {
   const cms = new CMS();
-  const posts = await cms.getPosts();
+  const posts = await cms.getPosts({ drafts: true });
+
+  console.log(context);
 
   return {
     props: { posts },

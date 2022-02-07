@@ -24,25 +24,12 @@ export class StrapiV3 implements DataSource {
     return res.json();
   }
 
-  async getPost(id: string): Promise<Post> {
-    this.logger.info(`Retrieving post with [id=${id}]`);
+  private generateSearchQuery(options: Options): string {
+    if (Object.keys(options).length === 0) {
+      return "";
+    }
 
-    const res = await this.internalFetch<PostV3>(
-      `/blog-posts/${id}?_publicationState=preview`
-    );
-
-    this.logger.info(`Successfully retrieved post with [id=${id}]`);
-
-    return res;
-  }
-
-  async getPosts(options: Options = {}): Promise<Array<Post>> {
     const { featured, drafts, preview } = options;
-    this.logger.info(
-      "Retrieving posts",
-      `provided options: [featured=${featured}], [drafts=${drafts}], [preview=${preview}]`
-    );
-
     const query = new URLSearchParams();
 
     if (isDefined(featured)) {
@@ -57,9 +44,33 @@ export class StrapiV3 implements DataSource {
       query.append("_publicationState", "preview");
     }
 
-    const res = await this.internalFetch<Array<PostV3>>(
-      `/blog-posts?${query.toString()}`
+    return `?${query.toString()}`;
+  }
+
+  async getPost(id: string, options: Options = {}): Promise<Post> {
+    const { featured, drafts, preview } = options;
+    this.logger.info(
+      `Retrieving post with [id=${id}]`,
+      `provided options: [featured=${featured}], [drafts=${drafts}], [preview=${preview}]`
     );
+
+    const query = this.generateSearchQuery(options);
+    const res = await this.internalFetch<PostV3>(`/blog-posts/${id}${query}`);
+
+    this.logger.info(`Successfully retrieved post with [id=${id}]`);
+
+    return res;
+  }
+
+  async getPosts(options: Options = {}): Promise<Array<Post>> {
+    const { featured, drafts, preview } = options;
+    this.logger.info(
+      "Retrieving posts",
+      `provided options: [featured=${featured}], [drafts=${drafts}], [preview=${preview}]`
+    );
+
+    const query = this.generateSearchQuery(options);
+    const res = await this.internalFetch<Array<PostV3>>(`/blog-posts${query}`);
 
     this.logger.info(`Successfully retrieved [length=${res.length}] posts`);
     return res;

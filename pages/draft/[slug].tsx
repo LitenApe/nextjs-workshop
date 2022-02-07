@@ -28,7 +28,7 @@ export default function BlogPost(props: Props): JSX.Element {
 
 export async function getStaticPaths() {
   const cms = new CMS();
-  const posts = await cms.getPosts();
+  const posts = await cms.getPosts({ drafts: true });
 
   return {
     paths: posts.map((post) => ({

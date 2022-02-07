@@ -24,14 +24,44 @@ export class StrapiV4 implements DataSource {
     return res.json();
   }
 
-  async getPost(id: string): Promise<Post> {
-    this.logger.info(`Retrieving post with [id=${id}]`);
+  private generateSearchQuery(options: Options): string {
+    if (Object.keys(options).length === 0) {
+      return "";
+    }
 
-    const res = await this.internalFetch<{ data: PostV4 }>(
-      `/api/blog-posts/${id}?publicationState=preview`
+    const { featured, preview, drafts } = options;
+    const query = new URLSearchParams();
+
+    if (isDefined(featured)) {
+      query.append("filters[featured][$eq]", "true");
+    }
+
+    if (isDefined(drafts)) {
+      query.append("filters[publishedAt][$null]", "true");
+    }
+
+    if (isDefined(drafts) || isDefined(preview)) {
+      query.append("publicationState", "preview");
+    }
+
+    this.logger.info(`Generated search [query=${query.toString()}]`);
+
+    return `?${query.toString()}`;
+  }
+
+  async getPost(id: string, options: Options = {}): Promise<Post> {
+    const { featured, drafts, preview } = options;
+    this.logger.info(
+      `Retrieving post with [id=${id}].`,
+      `Provided options: [featured=${featured}], [drafts=${drafts}], [preview=${preview}].`
     );
 
-    this.logger.info(`Successfully retrieved post with [id=${id}]`);
+    const query = this.generateSearchQuery(options);
+    const res = await this.internalFetch<{ data: PostV4 }>(
+      `/api/blog-posts/${id}${query}`
+    );
+
+    this.logger.info(`Successfully retrieved post with [id=${id}].`);
     return {
       id: res.data.id,
       title: res.data.attributes.title,
@@ -45,22 +75,17 @@ export class StrapiV4 implements DataSource {
   async getPosts(options: Options = {}): Promise<Array<Post>> {
     const { featured, drafts, preview } = options;
     this.logger.info(
-      "Retrieving posts",
-      `provided options: [featured=${featured}], [drafts=${drafts}], [preview=${preview}]`
+      "Retrieving posts.",
+      `Provided options: [featured=${featured}], [drafts=${drafts}], [preview=${preview}].`
     );
 
-    const query = new URLSearchParams();
-
-    if (isDefined(featured)) {
-      query.append("filter[featured][$eq]", "true");
-    }
-
+    const query = this.generateSearchQuery(options);
     const res = await this.internalFetch<{ data: Array<PostV4> }>(
       `/api/blog-posts?${query.toString()}`
     );
 
     this.logger.info(
-      `Successfully retrieved [length=${res.data.length}] posts`
+      `Successfully retrieved [length=${res.data.length}] posts.`
     );
     return res.data.map((post) => ({
       id: post.id,

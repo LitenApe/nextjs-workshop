@@ -34,6 +34,6 @@ export interface Options {
 }
 
 export interface DataSource {
-  getPost(id: String): Promise<Post>;
+  getPost(id: String, options?: Options): Promise<Post>;
   getPosts(options: Options): Promise<Array<Post>>;
 }

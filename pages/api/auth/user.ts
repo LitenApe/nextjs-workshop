@@ -29,7 +29,7 @@ export default async function handler(
       } catch (err) {
         res.setHeader(
           "Set-Cookie",
-          serialize("authorization", "null", { path: "/" })
+          serialize("authorization", "", { path: "/", expires: new Date() })
         );
         return res.status(400).send(undefined);
       }

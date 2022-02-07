@@ -36,7 +36,7 @@ export default function Home(props: Props): JSX.Element {
       <List>
         {posts.map((post) => (
           <ListItem key={`blog-post-link-${post.id}`}>
-            <PostLink title={post.title} id={post.id} />
+            <PostLink title={post.title} slug={`/post/${post.id}`} />
           </ListItem>
         ))}
       </List>
