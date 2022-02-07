@@ -5,8 +5,6 @@ import Document, {
   NextScript,
   DocumentContext,
 } from "next/document";
-import { NavigationBar } from "../components/layout/NavigationBar";
-import { Footer } from "../components/layout/Footer";
 // import { authGuard } from "./middleware/authGuard";
 
 class MyDocument extends Document {
@@ -31,9 +29,7 @@ class MyDocument extends Document {
       <Html lang="en">
         <Head />
         <body>
-          <NavigationBar />
           <Main />
-          <Footer />
           <NextScript />
         </body>
       </Html>
