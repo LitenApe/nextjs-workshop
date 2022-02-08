@@ -4,7 +4,6 @@ import { Post } from "../../service/cms/domain";
 import { isDefined } from "../../utils/isDefined";
 
 import * as React from "react";
-import { authGuard } from "../../middleware/authGuard";
 
 interface Props {
   readonly post: Post;
@@ -28,16 +27,6 @@ export default function BlogPost(props: Props): JSX.Element {
 }
 
 export async function getServerSideProps(context: any) {
-  const unauthorized = await authGuard(context.req, context.res);
-  if (unauthorized) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/auth/signin",
-      },
-    };
-  }
-
   try {
     const cms = new CMS();
     const post = await cms.getPost(context.params.slug);
