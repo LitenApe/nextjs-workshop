@@ -2,7 +2,7 @@
 import { serialize } from "cookie";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { Authentication } from "../../../service/auth/authentication";
-import { isDefined } from "../../../utils/isDefined";
+import { isDefined } from "../../../lib/isDefined";
 
 async function postHandler(req: NextApiRequest, res: NextApiResponse<unknown>) {
   const payload = JSON.parse(req.body);

@@ -1,7 +1,7 @@
 import { Container, List, ListItem } from "@mui/material";
 import Link from "next/link";
 import * as React from "react";
-import { isDefined } from "../../utils/isDefined";
+import { isDefined } from "../../lib/isDefined";
 
 const common = [
   {

@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { CMS } from "../../service/cms/cms";
 import { Post } from "../../service/cms/domain";
-import { isDefined } from "../../utils/isDefined";
+import { isDefined } from "../../lib/isDefined";
 
 import * as React from "react";
 

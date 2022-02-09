@@ -5,7 +5,6 @@ import Document, {
   NextScript,
   DocumentContext,
 } from "next/document";
-// import { authGuard } from "./middleware/authGuard";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx: DocumentContext) {
@@ -16,8 +15,6 @@ class MyDocument extends Document {
         enhanceApp: (App) => App,
         enhanceComponent: (Page) => Page,
       });
-
-    // await authGuard(ctx.req, ctx.res);
 
     const initialProps = await Document.getInitialProps(ctx);
 

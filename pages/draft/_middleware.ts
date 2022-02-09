@@ -1,6 +1,6 @@
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 import { Logger } from "../../service/logger/logger";
-import { isDefined } from "../../utils/isDefined";
+import { isDefined } from "../../lib/isDefined";
 
 export default function middleware(req: NextRequest, event: NextFetchEvent) {
   const token = req.cookies["authorization"];

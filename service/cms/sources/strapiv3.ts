@@ -1,4 +1,4 @@
-import { isDefined } from "../../../utils/isDefined";
+import { isDefined } from "../../../lib/isDefined";
 import { Logger } from "../../logger/logger";
 import { DataSource, Options, Post, PostV3 } from "../domain";
 
